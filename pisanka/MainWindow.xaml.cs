@@ -18,6 +18,7 @@ namespace pisanka
         {
             InitializeComponent();
             InitGrid();
+            GenerateBoard();
         }
 
         enum CellType
@@ -52,6 +53,30 @@ namespace pisanka
                     GameGrid.Children.Add(b);
 
                     cells[x, y] = b;
+                }
+            }
+        }
+
+        void GenerateBoard()
+        {
+            PlaceRandom(CellType.Egg, 10);
+            PlaceRandom(CellType.Blocked, 40);
+            PlaceRandom(CellType.Player, 1);
+        }
+
+        void PlaceRandom(CellType type, int count)
+        {
+            int placed = 0;
+
+            while (placed < count)
+            {
+                int x = rand.Next(SIZE);
+                int y = rand.Next(SIZE);
+
+                if (board[x, y] == CellType.Empty)
+                {
+                    board[x, y] = type;
+                    placed++;
                 }
             }
         }
