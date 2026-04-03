@@ -80,5 +80,15 @@ namespace pisanka
                 }
             }
         }
+
+        (int, int) FindPlayer()
+        {
+            for (int y = 0; y < SIZE; y++)
+                for (int x = 0; x < SIZE; x++)
+                    if (board[x, y] == CellType.Player)
+                        return (x, y);
+
+            return (-1, -1);
+        }
     }
 }
