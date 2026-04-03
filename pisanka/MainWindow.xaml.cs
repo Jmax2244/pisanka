@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -7,12 +8,24 @@ namespace pisanka
     public partial class MainWindow : Window
     {
         const int SIZE = 10;
+
         Border[,] cells = new Border[SIZE, SIZE];
+        CellType[,] board = new CellType[SIZE, SIZE];
+
+        Random rand = new Random();
 
         public MainWindow()
         {
             InitializeComponent();
             InitGrid();
+        }
+
+        enum CellType
+        {
+            Empty,
+            Player,
+            Egg,
+            Blocked
         }
 
         void InitGrid()
