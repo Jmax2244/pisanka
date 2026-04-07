@@ -20,6 +20,7 @@ namespace pisanka
         public MainWindow()
         {
             InitializeComponent();
+            Title = $"Pisanki (Zebrane: {eggsCollected})";
             InitGrid();
             GenerateBoard();
             Render();
@@ -140,12 +141,16 @@ namespace pisanka
                 return;
 
             if (board[nx, ny] == CellType.Egg)
+            {
                 eggsCollected++;
+                Title = $"Pisanki (Zebrane: {eggsCollected})";
+            }
 
             board[px, py] = CellType.Empty;
             board[nx, ny] = CellType.Player;
 
             Render();
+            CheckWin();
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
@@ -185,6 +190,14 @@ namespace pisanka
             FloodFill(x - 1, y, visited, ref eggsFound);
             FloodFill(x, y + 1, visited, ref eggsFound);
             FloodFill(x, y - 1, visited, ref eggsFound);
+        }
+
+        void CheckWin()
+        {
+            if (eggsCollected >= 10)
+            {
+                MessageBox.Show("Wygrales Pisanki Brawo! 🥚🥚🥚🥚🥚🥚🥚🥚");
+            }
         }
     }
 }
