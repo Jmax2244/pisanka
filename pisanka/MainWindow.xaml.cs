@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace pisanka
 {
@@ -61,9 +62,15 @@ namespace pisanka
 
         void GenerateBoard()
         {
-            PlaceRandom(CellType.Egg, 10);
-            PlaceRandom(CellType.Blocked, 40);
-            PlaceRandom(CellType.Player, 1);
+            do
+            {
+                board = new CellType[SIZE, SIZE];
+
+                PlaceRandom(CellType.Egg, 10);
+                PlaceRandom(CellType.Blocked, 40);
+                PlaceRandom(CellType.Player, 1);
+
+            } while (!IsBoardSolvable());
         }
 
         void PlaceRandom(CellType type, int count)
@@ -108,10 +115,10 @@ namespace pisanka
                             cells[x, y].Background = Brushes.Black;
                             break;
                         case CellType.Player:
-                            cells[x, y].Background = Brushes.Gold;
+                            cells[x, y].Background = new ImageBrush(new BitmapImage(new Uri("https://png.pngtree.com/png-clipart/20250601/original/pngtree-adorable-brown-hare-with-big-ears-png-image_21107466.png", UriKind.Absolute)));
                             break;
                         case CellType.Egg:
-                            cells[x, y].Background = Brushes.LightGreen;
+                            cells[x, y].Background = new ImageBrush(new BitmapImage(new Uri("https://leclercdrive.lublin.pl/public/upload/sellasist_cache/thumb_page_1bce749b67976dc0accc252a5597d7ba.jpg", UriKind.Absolute)));
                             break;
                     }
                 }
@@ -143,6 +150,37 @@ namespace pisanka
             if (e.Key == Key.Down) MovePlayer(0, 1);
             if (e.Key == Key.Left) MovePlayer(-1, 0);
             if (e.Key == Key.Right) MovePlayer(1, 0);
+        }
+
+        bool IsBoardSolvable()
+        {
+            var (px, py) = FindPlayer();
+
+            bool[,] visited = new bool[SIZE, SIZE];
+            int eggsFound = 0;
+
+            FloodFill(px, py, visited, ref eggsFound);
+
+            return eggsFound == 10;
+        }
+
+        void FloodFill(int x, int y, bool[,] visited, ref int eggsFound)
+        {
+            if (x < 0 || y < 0 || x >= SIZE || y >= SIZE)
+                return;
+
+            if (visited[x, y] || board[x, y] == CellType.Blocked)
+                return;
+
+            visited[x, y] = true;
+
+            if (board[x, y] == CellType.Egg)
+                eggsFound++;
+
+            FloodFill(x + 1, y, visited, ref eggsFound);
+            FloodFill(x - 1, y, visited, ref eggsFound);
+            FloodFill(x, y + 1, visited, ref eggsFound);
+            FloodFill(x, y - 1, visited, ref eggsFound);
         }
     }
 }
