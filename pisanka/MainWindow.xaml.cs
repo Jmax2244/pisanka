@@ -15,6 +15,7 @@ namespace pisanka
         CellType[,] board = new CellType[SIZE, SIZE];
 
         Random rand = new Random();
+        int eggsCollected = 0;
 
         public MainWindow()
         {
@@ -137,6 +138,9 @@ namespace pisanka
 
             if (board[nx, ny] == CellType.Blocked)
                 return;
+
+            if (board[nx, ny] == CellType.Egg)
+                eggsCollected++;
 
             board[px, py] = CellType.Empty;
             board[nx, ny] = CellType.Player;
