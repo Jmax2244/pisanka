@@ -19,6 +19,7 @@ namespace pisanka
             InitializeComponent();
             InitGrid();
             GenerateBoard();
+            Render();
         }
 
         enum CellType
@@ -89,6 +90,31 @@ namespace pisanka
                         return (x, y);
 
             return (-1, -1);
+        }
+
+        void Render()
+        {
+            for (int y = 0; y < SIZE; y++)
+            {
+                for (int x = 0; x < SIZE; x++)
+                {
+                    switch (board[x, y])
+                    {
+                        case CellType.Empty:
+                            cells[x, y].Background = Brushes.White;
+                            break;
+                        case CellType.Blocked:
+                            cells[x, y].Background = Brushes.Black;
+                            break;
+                        case CellType.Player:
+                            cells[x, y].Background = Brushes.Gold;
+                            break;
+                        case CellType.Egg:
+                            cells[x, y].Background = Brushes.LightGreen;
+                            break;
+                    }
+                }
+            }
         }
     }
 }
