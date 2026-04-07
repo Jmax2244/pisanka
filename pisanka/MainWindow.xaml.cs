@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace pisanka
@@ -115,6 +116,33 @@ namespace pisanka
                     }
                 }
             }
+        }
+
+        void MovePlayer(int dx, int dy)
+        {
+            var (px, py) = FindPlayer();
+
+            int nx = px + dx;
+            int ny = py + dy;
+
+            if (nx < 0 || ny < 0 || nx >= SIZE || ny >= SIZE)
+                return;
+
+            if (board[nx, ny] == CellType.Blocked)
+                return;
+
+            board[px, py] = CellType.Empty;
+            board[nx, ny] = CellType.Player;
+
+            Render();
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Up) MovePlayer(0, -1);
+            if (e.Key == Key.Down) MovePlayer(0, 1);
+            if (e.Key == Key.Left) MovePlayer(-1, 0);
+            if (e.Key == Key.Right) MovePlayer(1, 0);
         }
     }
 }
